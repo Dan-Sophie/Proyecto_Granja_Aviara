@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Aviara - Reporte Inteligente de Inventario</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 2cm;
+            @bottom-right {
+                content: "Página " counter(page) " de " counter(pages);
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #718096;
+            }
+            @bottom-left {
+                content: "Aviara © 2026 - Control Interno Confidencial";
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 8pt;
+                color: #718096;
+            }
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #2D3748;
+            line-height: 1.4;
+            font-size: 10pt;
+        }
+
+        /* Encabezado Principal */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 15px;
+        }
+        .logo-title {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #1A202C;
+            letter-spacing: -1px;
+        }
+        .subtitle {
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #718096;
+            margin-top: 5px;
+        }
+        .meta-datos {
+            text-align: right;
+            font-size: 9pt;
+            color: #4A5568;
+        }
+
+        /* Sección de Decisiones Inteligentes */
+        .seccion-analitica {
+            background-color: #F7FAFC;
+            border-left: 4px solid #2D3748;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+        .seccion-analitica h3 {
+            margin: 0 0 10px 0;
+            color: #1A202C;
+            font-size: 12pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .alerta-item {
+            margin-bottom: 6px;
+            font-size: 9.5pt;
+        }
+        .badge-danger { color: #C53030; font-weight: bold; }
+        .badge-warning { color: #B7791F; font-weight: bold; }
+        .badge-success { color: #2F855A; font-weight: bold; }
+
+        /* Tabla de Datos Principal */
+        .tabla-datos {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .tabla-datos th {
+            background-color: #EDF2F7;
+            color: #2D3748;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 8pt;
+            letter-spacing: 0.5px;
+            padding: 10px;
+            border-bottom: 1px solid #CBD5E0;
+            text-align: left;
+        }
+        .tabla-datos td {
+            padding: 10px;
+            border-bottom: 1px solid #E2E8F0;
+            font-size: 9.5pt;
+        }
+        .tabla-datos tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+        .fila-critica {
+            background-color: #FFF5F5 !important;
+        }
+        .text-center { text-align: center; }
+        .fw-bold { font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado Corporativo del PDF -->
+    <table class="header-table">
+        <tr>
+            <td>
+                <div class="logo-title">AVIARA</div>
+                <div class="subtitle">Informe Analítico de Existencias en Stock</div>
+            </td>
+            <td class="meta-datos">
+                <strong>Fecha Emisión:</strong> {{ fecha_generacion|date:"d/m/Y - h:i a" }}<br>
+                <strong>Generado por:</strong> {{ usuario.username }} (Admin)<br>
+                <strong>Estado Global:</strong> Activo
+            </td>
+        </tr>
+    </table>
+
+    <!-- RESUMEN EJECUTIVO PARA TOMA DE DECISIONES -->
+    <div class="seccion-analitica">
+        <h3>Diagnóstico del Sistema para Toma de Decisiones</h3>
+        
+        <div class="alerta-item">
+            • <strong>Disponibilidad Total Física:</strong> <span class="badge-success">{{ total_stock }} unidades</span> vigentes en los galpones.
+        </div>
+        
+        <div class="alerta-item">
+            • <strong>Alertas de Reabastecimiento Crítico:</strong> 
+            {% if lotes_criticos %}
+                <span class="badge-danger">Se detectan {{ lotes_criticos|length }} lote(s) bajo el stock mínimo de seguridad.</span> Se sugiere reordenar producción de inmediato.
+            {% else %}
+                <span class="badge-success">Todos los lotes operan con niveles estables de stock de seguridad.</span>
+            {% endif %}
+        </div>
+
+        <div class="alerta-item">
+            • <strong>Estrategia de Ventas y Descartes:</strong>
+            {% if lotes_prioridad_venta or lotes_danados %}
+                A partir de la clasificación de calidad, se recomienda:
+                {% if lotes_prioridad_venta %}
+                    <span class="badge-warning">Priorizar la venta rápida de {{ lotes_prioridad_venta|length }} lote(s) en calidad Media</span> para mitigar devaluación.
+                {% endif %}
+                {% if lotes_danados %}
+                    <span class="badge-danger">Dar salida inmediata por merma a {{ lotes_danados|length }} lote(s) Dañados</span> para no alterar los balances físicos de comercialización.
+                {% endif %}
+            {% else %}
+                <span class="badge-success">El 100% del stock se encuentra clasificado en calidad Aceptable y listo para distribución regular.</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- TABLA MAESTRA DETALLADA -->
+    <h3 style="font-size: 12pt; color: #2D3748; margin-top: 25px; margin-bottom: 10px;">Desglose General de Lotes Activos</h3>
+    <table class="tabla-datos">
+        <thead>
+            <tr>
+                <th style="width: 15%;">Código Lote</th>
+                <th style="width: 25%;">Producto</th>
+                <th style="width: 15%;">Vencimiento</th>
+                <th style="width: 15%;" class="text-center">Calidad</th>
+                <th style="width: 15%;" class="text-center">Stock Físico</th>
+                <th style="width: 15%;" class="text-center">Estado Crítico</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lote in lotes %}
+            <tr class="{% if lote.cantidad_actual < lote.stock_minimo %}fila-critica{% endif %}">
+                <td class="fw-bold"># {{ lote.codigo_lote }}</td>
+                <td>{{ lote.producto.nombre }}</td>
+                <td>{{ lote.fecha_vencimiento|date:"d/m/Y" }}</td>
+                <td class="text-center fw-bold">
+                    {% if lote.estado_calidad == 'ACEPTABLE' %}
+                        <span style="color: #2F855A;">Aceptable</span>
+                    {% elif lote.estado_calidad == 'MEDIO' %}
+                        <span style="color: #B7791F;">Medio</span>
+                    {% else %}
+                        <span style="color: #C53030;">Dañado</span>
+                    {% endif %}
+                </td>
+                <td class="text-center fw-bold">{{ lote.cantidad_actual }}</td>
+                <td class="text-center">
+                    {% if lote.cantidad_actual < lote.stock_minimo %}
+                        <span class="badge-danger">BAJO MÍNIMO</span>
+                    {% else %}
+                        <span style="color: #718096; font-size: 8.5pt;">Estable</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 30px; color: #718096;">
+                    No existen lotes de productos registrados en el sistema de inventario de la granja.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,1061 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio | Aviara{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+    --aviara-wine: #7A1026;
+    --aviara-wine-dark: #5C0B1C;
+    --aviara-wine-light: #A11D3A;
+
+    --aviara-bg: #F7F7F8;
+    --aviara-soft: #F1F2F4;
+    --aviara-surface: #FFFFFF;
+
+    --aviara-text: #1F2933;
+    --aviara-muted: #667085;
+    --aviara-border: #E5E7EB;
+
+    --aviara-accent: #B7791F;
+}
+    body > nav,
+    body > footer {
+        display: none !important;
+    }
+    html,
+body {
+    background: var(--aviara-bg) !important;
+}
+
+.landing-page {
+    background: var(--aviara-bg) !important;
+    color: var(--aviara-text);
+    min-height: 100vh;
+}
+
+.landing-page main, {
+.hero-section,
+.section-block {
+    background: var(--aviara-bg) !important;
+}
+    }
+
+    .landing-navbar {
+       background: var(--aviara-surface) !important;
+       border-bottom: 1px solid rgba(122, 16, 38, 0.12);
+       box-shadow: 0 4px 18px rgba(122, 16, 38, 0.08);
+       position: sticky;
+       top: 0;
+       z-index: 100;
+    }
+
+    .landing-logo {
+    color: var(--aviara-wine);
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    text-decoration: none;
+}
+
+    .landing-nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .btn-aviara-primary {
+    background: var(--aviara-wine);
+    color: #ffffff;
+    border: 2px solid var(--aviara-wine);
+    border-radius: 999px;
+    padding: 10px 24px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-aviara-primary:hover {
+    background: var(--aviara-wine-dark);
+    border-color: var(--aviara-wine-dark);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+    .btn-aviara-outline {
+        background: transparent;
+        color: #7A1026;
+        border: 2px solid #7A1026;
+        border-radius: 999px;
+        padding: 10px 24px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-aviara-outline:hover {
+        background: #7A1026;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+    .hero-section {
+        padding: 70px 0 50px;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(245, 124, 0, 0.12);
+        color: var(--aviara-accent);
+        border: 1px solid rgba(245, 124, 0, 0.18);
+        border-radius: 999px;
+        padding: 8px 16px;
+        font-weight: 800;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+    }
+
+    .hero-title {
+        color: #7A1026;
+        font-size: clamp(2.4rem, 5vw, 4.8rem);
+        font-weight: 900;
+        line-height: 0.98;
+        letter-spacing: -2px;
+        margin-bottom: 22px;
+    }
+
+    .hero-text {
+        color: #59616f;
+        font-size: 1.12rem;
+        line-height: 1.8;
+        max-width: 620px;
+        margin-bottom: 28px;
+    }
+
+    .hero-visual {
+        min-height: 440px;
+        border-radius: 34px;
+        background:
+            linear-gradient(135deg, rgba(99, 14, 32, 0.10), rgba(245, 124, 0, 0.10)),
+            url('/media/productos/huevo_criollo_A.jpg') center/cover no-repeat;
+        box-shadow: 0 24px 60px rgba(99, 14, 32, 0.18);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-visual::after {
+        content: "Huevos frescos de finca";
+        position: absolute;
+        left: 24px;
+        bottom: 24px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #7A1026;
+        padding: 14px 20px;
+        border-radius: 18px;
+        font-weight: 800;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    .section-block {
+        padding: 55px 0;
+    }
+
+    .section-title {
+        color: #7A1026;
+        font-size: clamp(2rem, 3vw, 3rem);
+        font-weight: 900;
+        letter-spacing: -1px;
+        margin-bottom: 14px;
+    }
+
+    .section-subtitle {
+        color: #6b7280;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        max-width: 850px;
+    }
+
+    .info-card {
+        background: #ffffff;
+        border: 1px solid rgba(99, 14, 32, 0.08);
+        border-radius: 28px;
+        padding: 28px;
+        box-shadow: 0 18px 45px rgba(99, 14, 32, 0.08);
+        height: 100%;
+    }
+
+    .info-card-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        background: rgba(99, 14, 32, 0.10);
+        color: #7A1026;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.7rem;
+        margin-bottom: 18px;
+    }
+
+    .info-card h3 {
+        color: #243024;
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .info-card p {
+        color: #6b7280;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .image-panel {
+        min-height: 330px;
+        border-radius: 30px;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        box-shadow: 0 20px 50px rgba(99, 14, 32, 0.14);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .image-panel.egg {
+        background-image:
+            linear-gradient(135deg, rgba(99, 14, 32, 0.15), rgba(245, 124, 0, 0.10)),
+            url('/media/productos/huevos_cafe.png');
+    }
+
+    .image-panel.agro {
+        background-image:
+            linear-gradient(135deg, rgba(99, 14, 32, 0.12), rgba(245, 124, 0, 0.12)),
+            url('/media/productos/papaya.jpg');
+    }
+
+    .image-panel.farm {
+        background-image:
+            linear-gradient(135deg, rgba(99, 14, 32, 0.12), rgba(245, 124, 0, 0.10)),
+            url('/media/productos/huevo_criollo.jpg');
+    }
+
+    .image-caption {
+        position: absolute;
+        left: 22px;
+        right: 22px;
+        bottom: 22px;
+        background: rgba(255, 255, 255, 0.93);
+        border-radius: 18px;
+        padding: 16px 18px;
+        color: #7A1026;
+        font-weight: 800;
+    }
+
+    .feature-list {
+        display: grid;
+        gap: 16px;
+        margin-top: 22px;
+    }
+
+    .feature-item {
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid rgba(99, 14, 32, 0.08);
+        border-radius: 18px;
+        padding: 16px 18px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+    .feature-item span {
+        color: var(--aviara-accent);
+        font-weight: 900;
+    }
+
+    .feature-item strong {
+        color: #243024;
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .feature-item p {
+        color: #6b7280;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    .highlight-section {
+        background: #ffffff;
+        border-radius: 36px;
+        padding: 45px;
+        box-shadow: 0 22px 55px rgba(99, 14, 32, 0.08);
+        border: 1px solid rgba(99, 14, 32, 0.08);
+    }
+
+    .aviara-footer {
+        background: #7A1026;
+        color: #ffffff;
+        margin-top: 55px;
+        padding: 42px 0 22px;
+    }
+
+    .footer-logo {
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -1px;
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .footer-title {
+        color: var(--aviara-accent);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.82rem;
+        margin-bottom: 12px;
+    }
+
+    .footer-text {
+        color: rgba(255, 255, 255, 0.78);
+        line-height: 1.8;
+        margin: 0;
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+        margin-top: 30px;
+        padding-top: 18px;
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .landing-navbar .container {
+            gap: 14px;
+        }
+
+        .landing-nav-actions {
+            justify-content: flex-start;
+        }
+
+        .btn-aviara-primary,
+        .btn-aviara-outline {
+            padding: 9px 16px;
+            font-size: 0.9rem;
+        }
+
+        .hero-section {
+            padding-top: 42px;
+        }
+
+        .hero-visual {
+            min-height: 300px;
+            margin-top: 25px;
+        }
+
+        .highlight-section {
+            padding: 28px;
+        }
+    }
+    .breeds-grid {
+    margin-top: 40px;
+}
+
+.breed-card {
+    background: #ffffff;
+    border-radius: 28px;
+    overflow: hidden;
+    border: 1px solid rgba(99, 14, 32, 0.08);
+    box-shadow: 0 20px 45px rgba(99, 14, 32, 0.08);
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.breed-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 26px 55px rgba(99, 14, 32, 0.13);
+}
+
+.breed-carousel .carousel-item img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.breed-content {
+    padding: 24px;
+}
+
+.breed-title {
+    color: #7A1026;
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.breed-text {
+    color: #667085;
+    line-height: 1.8;
+    margin-bottom: 18px;
+}
+
+.breed-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.breed-tag {
+    background: rgba(99, 14, 32, 0.08);
+    color: #7A1026;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 0.88rem;
+    font-weight: 800;
+}
+
+.breed-info-list {
+    display: grid;
+    gap: 12px;
+}
+
+.breed-info-item {
+    background: #faf7f8;
+    border: 1px solid rgba(99, 14, 32, 0.08);
+    border-radius: 16px;
+    padding: 12px 14px;
+}
+
+.breed-info-item strong {
+    display: block;
+    color: #243024;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+.breed-info-item span {
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.breed-carousel .carousel-control-prev,
+.breed-carousel .carousel-control-next {
+    width: 42px;
+    height: 42px;
+    background: rgba(99, 14, 32, 0.78);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 1;
+}
+
+.breed-carousel .carousel-control-prev {
+    left: 14px;
+}
+
+.breed-carousel .carousel-control-next {
+    right: 14px;
+}
+
+.breed-carousel .carousel-indicators {
+    margin-bottom: 10px;
+}
+
+.breed-carousel .carousel-indicators [data-bs-target] {
+    background-color: #7A1026;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+@media (max-width: 768px) {
+    .breed-carousel .carousel-item img {
+        height: 220px;
+    }
+
+    .breed-content {
+        padding: 20px;
+    }
+}
+/* ===== Iconos sección ¿Por qué elegir Aviara? ===== */
+
+.why-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.why-card::before {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    top: -45px;
+    right: -45px;
+    background: radial-gradient(circle, rgba(245, 124, 0, 0.14), transparent 65%);
+    border-radius: 50%;
+}
+
+.why-card-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #7A1026, #A11D3A);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    box-shadow: 0 14px 28px rgba(99, 14, 32, 0.22);
+    border: 3px solid rgba(245, 124, 0, 0.25);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.why-card-icon::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 26px;
+    border: 1px solid rgba(99, 14, 32, 0.12);
+}
+
+.why-card:hover .why-card-icon {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 18px 36px rgba(99, 14, 32, 0.28);
+}
+</style>
+{% endblock %}
+
+{% block main_container %}
+<div class="landing-page">
+
+    <header class="landing-navbar">
+        <div class="container py-3 d-flex justify-content-between align-items-center flex-wrap">
+            <a href="{% url 'landing' %}" class="landing-logo">AVIARA</a>
+
+            <div class="landing-nav-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'perfil_cliente' %}" class="btn-aviara-primary">Mi cuenta</a>
+                    <a href="{% url 'catalogo' %}" class="btn-aviara-outline">Ver catálogo</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-aviara-primary">Ingresar</a>
+                    <a href="{% url 'catalogo' %}" class="btn-aviara-outline">Ver catálogo</a>
+                    <a href="{% url 'registro' %}" class="btn-aviara-outline">Registrarse</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <div class="hero-badge">
+                            <i class="bi bi-egg-fill"></i>
+                            Producción avícola y agrícola
+                        </div>
+
+                        <h1 class="hero-title">Bienvenido a Aviara</h1>
+
+                        <p class="hero-text">
+                            En Aviara trabajamos para ofrecer productos frescos, confiables y de calidad,
+                            integrando el cuidado de nuestras aves, la producción responsable y el
+                            aprovechamiento agrícola de la finca.
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="{% url 'catalogo' %}" class="btn-aviara-primary">
+                                Conocer el catálogo
+                            </a>
+
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'perfil_cliente' %}" class="btn-aviara-outline">
+                                    Ir a mi cuenta
+                                </a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn-aviara-outline">
+                                    Ingresar al sistema
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="hero-visual"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="container">
+                <div class="highlight-section">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-6">
+                            <h2 class="section-title">¿Quiénes somos?</h2>
+                            <p class="section-subtitle">
+                                Aviara es una finca dedicada a la producción y comercialización de alimentos
+                                avícolas y agrícolas. Nuestro objetivo es brindar productos frescos, bien
+                                cuidados y seleccionados, manteniendo un proceso organizado desde la
+                                producción hasta la entrega al cliente.
+                            </p>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-card">
+                                        <div class="info-card-icon">
+                                            <i class="bi bi-shield-check"></i>
+                                        </div>
+                                        <h3>Calidad</h3>
+                                        <p>Procesos orientados a conservar buenas condiciones del producto.</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="info-card">
+                                        <div class="info-card-icon">
+                                            <i class="bi bi-house-heart"></i>
+                                        </div>
+                                        <h3>Origen local</h3>
+                                        <p>Producción directa desde la finca, con atención cercana y responsable.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <div class="image-panel egg">
+                            <div class="image-caption">
+                                Huevos frescos de gallina como producto principal de Aviara.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <h2 class="section-title">Nuestro producto principal</h2>
+                        <p class="section-subtitle">
+                            Los huevos frescos son el producto principal de Aviara. Se obtienen de gallinas
+                            ponedoras cuidadas bajo condiciones adecuadas de alimentación, higiene y bienestar,
+                            buscando entregar un alimento nutritivo, fresco y de excelente calidad.
+                        </p>
+
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <span>01</span>
+                                <div>
+                                    <strong>Selección cuidadosa</strong>
+                                    <p>Los huevos se revisan y organizan para mantener una presentación adecuada.</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <span>02</span>
+                                <div>
+                                    <strong>Frescura y confianza</strong>
+                                    <p>La producción se maneja desde la finca para conservar trazabilidad y control.</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <span>03</span>
+                                <div>
+                                    <strong>Gestión organizada</strong>
+                                    <p>Aviara permite administrar catálogo, inventario, pedidos y producción.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Nuestras gallinas</h2>
+            <p class="section-subtitle mx-auto">
+                La producción de huevos en Aviara se apoya en gallinas ponedoras seleccionadas
+                por su capacidad de postura, adaptación y calidad del huevo. Estas son algunas
+                de las razas manejadas dentro de la finca.
+            </p>
+        </div>
+
+        <div class="row g-4 breeds-grid">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="breed-card">
+                    <div id="isaBrownCarousel" class="carousel slide breed-carousel" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#isaBrownCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#isaBrownCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#isaBrownCarousel" data-bs-slide-to="2"></button>
+                        </div>
+
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="/media/landing/isa1.jpg" alt="Gallina Isa Brown">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/media/landing/isa2.jpg" alt="Gallina Isa Brown">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/media/landing/isa3.jpg" alt="Gallina Isa Brown">
+                            </div>
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#isaBrownCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#isaBrownCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+
+                    <div class="breed-content">
+                        <h3 class="breed-title">Isa Brown</h3>
+                        <p class="breed-text">
+                            Raza reconocida por su alta capacidad de postura, buena adaptación
+                            y producción constante de huevos de cáscara café.
+                        </p>
+
+                        <div class="breed-tags">
+                            <span class="breed-tag">Alta postura</span>
+                            <span class="breed-tag">Huevos café</span>
+                            <span class="breed-tag">Adaptable</span>
+                        </div>
+
+                        <div class="breed-info-list">
+                            <div class="breed-info-item">
+                                <strong>Producción</strong>
+                                <span>Destaca por su rendimiento constante en postura.</span>
+                            </div>
+                            <div class="breed-info-item">
+                                <strong>Manejo</strong>
+                                <span>Buena respuesta a sistemas de producción organizados.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="breed-card">
+                    <div id="sussexCarousel" class="carousel slide breed-carousel" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#sussexCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#sussexCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#sussexCarousel" data-bs-slide-to="2"></button>
+                        </div>
+
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="/media/landing/sussex1.jpg" alt="Gallina Sussex">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/media/landing/sussex2.jpg" alt="Gallina Sussex">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/media/landing/sussex3.jpg" alt="Gallina Sussex">
+                            </div>
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#sussexCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#sussexCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+
+                    <div class="breed-content">
+                        <h3 class="breed-title">Sussex</h3>
+                        <p class="breed-text">
+                            Raza valorada por su rusticidad, docilidad y versatilidad. Se adapta bien
+                            a condiciones de finca y puede aportar buena producción de huevos.
+                        </p>
+
+                        <div class="breed-tags">
+                            <span class="breed-tag">Rústica</span>
+                            <span class="breed-tag">Dócil</span>
+                            <span class="breed-tag">Versátil</span>
+                        </div>
+
+                        <div class="breed-info-list">
+                            <div class="breed-info-item">
+                                <strong>Producción</strong>
+                                <span>Buena postura con manejo equilibrado.</span>
+                            </div>
+                            <div class="breed-info-item">
+                                <strong>Cualidades</strong>
+                                <span>Tranquila, resistente y adecuada para producción local.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="breed-card">
+                    <div id="australCarousel" class="carousel slide breed-carousel" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#australCarousel" data-bs-slide-to="0" class="active"></button>
+                            <button type="button" data-bs-target="#australCarousel" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#australCarousel" data-bs-slide-to="2"></button>
+                        </div>
+
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="/media/landing/austral1.jpg" alt="Gallina Austral blanco">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/media/landing/austral2.jpg" alt="Gallina Austral blanco">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/media/landing/austral3.jpg" alt="Gallina Austral blanco">
+                            </div>
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#australCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#australCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+
+                    <div class="breed-content">
+                        <h3 class="breed-title">Austral blanco</h3>
+                        <p class="breed-text">
+                            Raza apreciada por su adaptación y manejo estable. Aporta equilibrio entre
+                            producción, resistencia y facilidad de cuidado en la finca.
+                        </p>
+
+                        <div class="breed-tags">
+                            <span class="breed-tag">Adaptable</span>
+                            <span class="breed-tag">Resistente</span>
+                            <span class="breed-tag">Manejo estable</span>
+                        </div>
+
+                        <div class="breed-info-list">
+                            <div class="breed-info-item">
+                                <strong>Producción</strong>
+                                <span>Buen comportamiento productivo dentro de sistemas de finca.</span>
+                            </div>
+                            <div class="breed-info-item">
+                                <strong>Fortalezas</strong>
+                                <span>Adaptabilidad, resistencia y facilidad de manejo.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+        <section class="section-block">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <h2 class="section-title">Alimentación y cuidado</h2>
+                        <p class="section-subtitle">
+                            Las gallinas reciben alimentación balanceada, acompañada de agua limpia y manejo
+                            constante. El cuidado del espacio, la higiene y la revisión diaria permiten mantener
+                            mejores condiciones para la producción avícola.
+                        </p>
+
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <span><i class="bi bi-check-circle-fill"></i></span>
+                                <div>
+                                    <strong>Alimentación balanceada</strong>
+                                    <p>Base nutricional adecuada para apoyar la postura y el bienestar.</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <span><i class="bi bi-check-circle-fill"></i></span>
+                                <div>
+                                    <strong>Higiene del espacio</strong>
+                                    <p>Manejo del entorno para reducir riesgos y mantener orden en la producción.</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-item">
+                                <span><i class="bi bi-check-circle-fill"></i></span>
+                                <div>
+                                    <strong>Revisión constante</strong>
+                                    <p>Seguimiento diario para controlar producción, inventario y novedades.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="image-panel farm">
+                            <div class="image-caption">
+                                Cuidado, alimentación y manejo responsable de la producción.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="container">
+                <div class="highlight-section">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-6">
+                            <div class="image-panel agro">
+                                <div class="image-caption">
+                                    Producción agrícola complementaria de la finca.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <h2 class="section-title">Producción agrícola de la finca</h2>
+                            <p class="section-subtitle">
+                                Además de la producción avícola, Aviara cuenta con una línea agrícola que
+                                complementa la oferta de la finca. Esta producción permite aprovechar los
+                                recursos del campo y ofrecer alimentos frescos de origen local.
+                            </p>
+
+                            <p class="section-subtitle">
+                                En esta sección no se muestran productos para venta. El catálogo se mantiene
+                                como el espacio principal para consultar disponibilidad, detalles y pedidos.
+                            </p>
+
+                            <a href="{% url 'catalogo' %}" class="btn-aviara-primary mt-3">
+                                Ir al catálogo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="section-title">¿Por qué elegir Aviara?</h2>
+                    <p class="section-subtitle mx-auto">
+                        Aviara combina producción local, organización administrativa y atención responsable
+                        para facilitar la gestión de una finca avícola y agrícola.
+                    </p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="info-card why-card">
+                            <div class="info-card-icon why-card-icon">
+                                <i class="bi bi-stars"></i>
+                            </div>
+                            <h3>Frescura</h3>
+                            <p>Productos manejados desde su origen en la finca.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="info-card why-card">
+                            <div class="info-card-icon why-card-icon">
+                                <i class="bi bi-clipboard-check"></i>
+                            </div>
+                            <h3>Control</h3>
+                            <p>Gestión de inventario, producción y pedidos.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="info-card why-card">
+                            <div class="info-card-icon why-card-icon">
+                                <i class="bi bi-tree"></i>
+                            </div>
+                            <h3>Finca</h3>
+                            <p>Producción avícola y agrícola de origen local.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="info-card why-card">
+                            <div class="info-card-icon why-card-icon">
+                                <i class="bi bi-person-heart"></i>
+                            </div>
+                            <h3>Confianza</h3>
+                            <p>Atención organizada y procesos responsables.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="aviara-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="footer-logo">AVIARA</div>
+                    <p class="footer-text">
+                        Sistema de gestión para granjas avícolas y producción agrícola.
+                        Organización, control y calidad desde la finca.
+                    </p>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="footer-title">Contacto</div>
+                    <p class="footer-text">
+                        Teléfono: +57 300 000 0000<br>
+                        WhatsApp: +57 300 000 0000<br>
+                        Correo: contacto@aviara.com
+                    </p>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="footer-title">Dirección</div>
+                    <p class="footer-text">
+                        Finca Aviara<br>
+                        Municipio / Departamento<br>
+                        Colombia
+                    </p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                © 2026 AVIARA - Sistema de gestión de granjas avícolas
+            </div>
+        </div>
+    </footer>
+
+</div>
+{% endblock %}

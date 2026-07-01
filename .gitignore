@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Django / base de datos local
+db.sqlite3
+*.sqlite3
+db_backup*.sqlite3
+
+# Variables sensibles
+.env
+local_settings.py
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Node / Cypress si existe
+node_modules/
+
+# Temporales
+*.tmp
+*.bak
+
+# Backups manuales de conflicto
+*_backup*.py
+*_backup*.html
+*_copia_vscode_conflicto.html
