@@ -1,0 +1,19 @@
+import os
+import sys
+
+project_path = '/home/sharon0620/Proyecto_Granja_Aviara'
+
+if project_path not in sys.path:
+    sys.path.insert(0, project_path)
+
+# Cargar variables del archivo .env si existe
+try:
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(project_path, '.env'))
+except Exception:
+    pass
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aviara_project.settings')
+
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
