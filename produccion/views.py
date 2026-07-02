@@ -26,9 +26,11 @@ def lista_produccion(request):
     Solo lee datos, no procesa ningún formulario.
     """
     if request.user.is_staff:
-        # Administrador: Ve todo el panorama global de la granja
-        registros = Produccion.objects.all().select_related('lote', 'usuario').order_by('-fecha_produccion')
-        return render(request, 'produccion/lista.html', {'registros': registros})
+        registros = Produccion.objects.all().select_related('lote', 'usuario').order_by('-fecha_registro_real')
+        return render(request, 'produccion/lista.html', {
+            'registros': registros,
+            'producciones': registros
+            })
     else:
         # Operador: Solo visualiza sus propias recolecciones diarias
         registros = Produccion.objects.filter(usuario=request.user).select_related('lote').order_by('-fecha_produccion')

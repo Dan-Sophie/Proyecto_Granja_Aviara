@@ -102,10 +102,19 @@
                     </thead>
                     <tbody style="font-size: 0.95rem; color: #334155;">
                         {% for p in producciones %}
-                        <tr>
+                        <tr data-cy="produccion-row">
                             <td class="p-4">
-                                <span class="fw-bold d-block text-dark" style="font-size: 0.95rem;">{{ p.fecha_produccion|date:"d M, Y" }}</span>
-                                <span class="badge bg-light text-secondary border mt-1" style="font-size: 0.75rem; font-weight: 500; border-radius: 4px;">ID: #{{ p.id }}</span>
+                                <span data-cy="fecha-produccion-informada" class="fw-bold d-block text-dark" style="font-size: 0.95rem;">
+                                    Fecha informada: {{ p.fecha_produccion|date:"d/m/Y" }}
+                                </span>
+
+                                <span data-cy="fecha-registro-real" class="d-block text-muted small mt-1">
+                                    Registro real: {{ p.fecha_registro_real|date:"d/m/Y - h:i a" }}
+                                </span>
+
+                                <span class="badge bg-light text-secondary border mt-1" style="font-size: 0.75rem; font-weight: 500; border-radius: 4px;">
+                                    ID: #{{ p.id }}
+                                </span>
                             </td>
                             
                             <td class="p-4">
@@ -143,7 +152,7 @@
                             </td>
                             
                             <td class="p-4 text-center">
-                                <span class="fw-bold text-dark" style="font-size: 1.1rem; color: #0D5C3A !important;">
+                                <span data-cy="cantidad-recolectada" class="fw-bold text-dark" style="font-size: 1.1rem; color: #0D5C3A !important;">
                                     {{ p.cantidad_recolectada }}
                                 </span>
                                 <span class="text-muted small fw-semibold ms-0.5">unds</span>
