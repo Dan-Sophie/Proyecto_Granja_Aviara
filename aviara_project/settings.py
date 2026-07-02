@@ -84,6 +84,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 MEDIA_URL = '/media/'
@@ -102,8 +106,6 @@ EMAIL_HOST_PASSWORD = 'hggs llcl gcjb llun'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
-# ── Groq API ── pon aquí tu API key de https://console.groq.com
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 os.environ['PATH'] = r'C:\gtk3\bin' + os.path.pathsep + os.environ.get('PATH', '')
