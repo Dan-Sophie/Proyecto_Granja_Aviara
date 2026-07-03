@@ -8,10 +8,9 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from datetime import timedelta
 from weasyprint import HTML, CSS
-
-# Importaciones de tu app local
 from .models import Merma, Lote
 from .forms import MermaForm, MermaOperadorForm
+from productos.models import Producto
 
 # Función auxiliar para comprobar si es Administrador/Staff
 def es_administrador(user):
@@ -138,73 +137,47 @@ def dashboard_inventario(request):
 
 
 @login_required
-def reporte_inventario_pdf(request):
-    hoy = timezone.now()
-    
-    # --- 1. FILTRO TEMPORAL ---
-    filtro = request.GET.get('filtro', 'mes')
-    if filtro == 'semana':
-        fecha_inicio = hoy - timedelta(days=7)
-        texto_filtro = "Últimos 7 Días (Semanal)"
-    elif filtro == 'trimestre':
-        fecha_inicio = hoy - timedelta(days=90)
-        texto_filtro = "Últimos 3 Meses (Trimestral)"
-    elif filtro == 'ano':
-        fecha_inicio = hoy - timedelta(days=365)
-        texto_filtro = "Último Año (Anual)"
-    else:
-        fecha_inicio = hoy - timedelta(days=30)
-        texto_filtro = "Últimos 30 Días (Mensual)"
+@user_passes_test(es_administrador, login_url='home')
+def dashboard_inventario(request):
+    return render(request, 'inventario/inventario_dashboard.html')
 
-    # =========================================================
-    # 🌟 CONTROL DE EXISTENCIAS DIRECTO DESDE LOS LOTES
-    # =========================================================
-    lotes_activos = Lote.objects.filter(cantidad_actual__gt=0)
-    
-    total_stock_disponible = lotes_activos.aggregate(
-        total_unds=Sum('cantidad_actual'),
-        valor_comercial=Sum(ExpressionWrapper(F('cantidad_actual') * F('producto__precio'), output_field=DecimalField()))
+
+@login_required
+@user_passes_test(es_administrador, login_url='home')
+def datos_reporte_inventario(request):
+    ahora = timezone.now()
+    inicio_mes = ahora.replace(day=1)
+
+    productos_estado = Producto.objects.values('estado').annotate(total=Count('id'))
+
+    mermas_mes = Merma.objects.filter(fecha_reporte__gte=inicio_mes)
+
+    resumen_mermas = mermas_mes.values('motivo').annotate(
+        total_cantidad=Sum('cantidad_perdida'),
+        conteo=Count('id')
     )
 
-    # =========================================================
-    # 🌟 AUDITORÍA TEMPORAL DE MERMAS
-    # =========================================================
-    mermas_filtradas = Merma.objects.filter(
-        fecha_reporte__range=[fecha_inicio, hoy],
-        estado='APROBADA'
-    ).select_related('lote', 'reportado_por')
+    top_usuario = Merma.objects.values('reportado_por__username').annotate(
+        total_mermas=Count('id')
+    ).order_by('-total_mermas').first()
 
-    metricas_mermas = mermas_filtradas.aggregate(
-        unidades_perdidas=Sum('cantidad_perdida'),
-        total_lotes_afectados=Count('lote', distinct=True),
-        ventas_perdidas=Sum(ExpressionWrapper(F('cantidad_perdida') * F('lote__producto__precio'), output_field=DecimalField()))
-    )
-
-    # =========================================================
-    # 🌟 AUDITORÍA DE OPERADORES (GROUP BY)
-    # =========================================================
-    rendimiento_operadores = (
-        mermas_filtradas.values('reportado_por__username')
-        .annotate(
-            total_registros=Count('id'),
-            unidades_reportadas=Sum('cantidad_perdida')
-        )
-        .order_by('-total_registros')
-    )
+    lotes_afectados = Merma.objects.values('lote__id').distinct().count()
 
     context = {
-        'lotes_stock': lotes_activos.order_by('-id'),
-        'stock_totales': total_stock_disponible,
-        'mermas': mermas_filtradas.order_by('-fecha_reporte')[:12],
-        'metricas_mermas': metricas_mermas,
-        'operadores': rendimiento_operadores,
-        'filtro_seleccionado': texto_filtro,
-        'fecha_generacion': hoy,
+        'productos': productos_estado,
+        'mermas_mes': resumen_mermas,
+        'top_usuario': top_usuario,
+        'lotes_afectados': lotes_afectados,
     }
 
-    html_string = render_to_string('inventario/reporte_pdf_template.html', context)
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="reporte_analitico_aviara.pdf"'
-    
-    HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf(response)
+    html_string = render_to_string('inventario/reporte_pdf.html', context)
+
+    pdf = HTML(
+        string=html_string,
+        base_url=request.build_absolute_uri('/')
+    ).write_pdf()
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="reporte_inventario.pdf"'
+
     return response

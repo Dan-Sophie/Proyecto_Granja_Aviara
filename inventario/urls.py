@@ -23,5 +23,5 @@ urlpatterns = [
     # =====================================================================
     # Vista del Administrador (Dashboard completo y descarga PDF)
     path('dashboard/', views.dashboard_inventario, name='dashboard_inventario'),
-    path('reporte/pdf/', views.reporte_inventario_pdf, name='reporte_inventario_pdf'),
+    path('reporte/pdf/', views.datos_reporte_inventario, name='reporte_inventario_pdf'),
 ]
