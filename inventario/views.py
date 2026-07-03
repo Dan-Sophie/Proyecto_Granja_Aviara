@@ -170,7 +170,7 @@ def datos_reporte_inventario(request):
         'lotes_afectados': lotes_afectados,
     }
 
-    html_string = render_to_string('inventario/reporte_pdf.html', context)
+    html_string = render_to_string('inventario/reporte_pdf_template.html', context)
 
     pdf = HTML(
         string=html_string,
