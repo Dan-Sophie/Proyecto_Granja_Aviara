@@ -52,6 +52,9 @@ def lista_pedidos(request):
 def gestionar_pedido(request, pk=None):
     pedido = get_object_or_404(Pedido, pk=pk) if pk else None
 
+    estado_anterior = pedido.estado_pedido if pedido else None
+    estados_descuentan_stock = ['PROCESANDO', 'CAMINO', 'ENTREGADO']
+
     if request.method == 'POST':
         form = PedidoForm(request.POST, instance=pedido)
         formset = DetallePedidoFormSet(request.POST, instance=pedido)
@@ -59,27 +62,57 @@ def gestionar_pedido(request, pk=None):
         if form.is_valid() and formset.is_valid():
             pedido_guardado = form.save()
             detalles = formset.save(commit=False)
+
             for detalle in detalles:
                 detalle.pedido = pedido_guardado
                 detalle.save()
+
             pedido_guardado.refresh_from_db()
             pedido_guardado.actualizar_total()
+
+            estado_nuevo = pedido_guardado.estado_pedido
+
+            debe_descontar_stock = (
+                estado_anterior not in estados_descuentan_stock
+                and estado_nuevo in estados_descuentan_stock
+            )
+
+            if debe_descontar_stock:
+                for detalle in pedido_guardado.detalles.select_related('producto').all():
+                    producto = detalle.producto
+
+                    if producto.stock < detalle.cantidad:
+                        messages.error(
+                            request,
+                            f"No hay suficiente stock para '{producto.nombre}'. "
+                            f"Stock disponible: {producto.stock}. Cantidad solicitada: {detalle.cantidad}."
+                        )
+
+                        return render(request, 'ventas/pedido_form.html', {
+                            'form': form,
+                            'formset': formset,
+                            'pedido': pedido_guardado
+                        })
+
+                    producto.stock -= detalle.cantidad
+                    producto.save(update_fields=['stock'])
+
             messages.success(request, f"Pedido #{pedido_guardado.id} guardado correctamente.")
             return redirect('lista_pedidos')
+
         else:
             error_texto = f"Error: {form.errors} | Detalles: {formset.errors}"
             messages.error(request, error_texto)
+
     else:
         form = PedidoForm(instance=pedido)
         formset = DetallePedidoFormSet(instance=pedido)
-    
-    # ESTE RETURN ES OBLIGATORIO: Siempre se ejecutará si falla el POST o si es un GET
+
     return render(request, 'ventas/pedido_form.html', {
         'form': form,
         'formset': formset,
         'pedido': pedido
     })
-
 
 def detalle_pedido(request, pk):
     pedido = get_object_or_404(Pedido, pk=pk)
